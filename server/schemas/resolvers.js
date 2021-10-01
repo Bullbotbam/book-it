@@ -16,13 +16,12 @@ const resolvers = {
 			throw new AuthenticationError('Please log in for more information');
 		},
 		// get all books
-		books: async (parent, { username }) => {
-			const params = username ? { username } : {};
-			return Book.find(params).sort({ createdAt: -1 });
+		books: async () => {
+			return Book.find();
 		},
 		// get a book by id
-		book: async (parent, { _id }) => {
-			return Book.findOne({ _id });
+		book: async (parent, { title }) => {
+			return Book.findOne({ title });
 		},
 		// get all users
 		users: async () => {
@@ -55,20 +54,9 @@ const resolvers = {
 			const token = signToken(user);
 			return { token, user };
 		},
-		addBook: async (parent, args, context) => {
-			if (context.user) {
-				const book = await Book.create({
-					...args,
-					username: context.user.username,
-				});
-				await User.findByIdAndUpdate(
-					{ _id: context.user._id },
-					{ $push: { books: book._id } },
-					{ new: true }
-				);
-				return book;
-			}
-			throw new AuthenticationError('Please log in to see more!');
+		addBook: async (parent, args) => {
+			const book = await Book.create(args);
+			return book;
 		},
 	},
 };

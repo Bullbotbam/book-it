@@ -6,6 +6,7 @@ type User {
     _id: ID
     username: String
     email: String
+    password: String
     bookCount: Int
     books: [book]
 }
@@ -25,7 +26,7 @@ type Query {
     me: User 
     users: [User]
     user(username: String!): User 
-    thoughts(username: String): [Book]
+    books(title: String): [Book]
     book(_id: ID!): Book 
 }
 
@@ -36,3 +37,6 @@ type Mutation {
 }
 
 `;
+
+// export typeDefs;
+module.exports = typeDefs;
