@@ -4,60 +4,64 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
 	Query: {
-		me: async (parent, args, context) => {
-			if (context.user) {
-				const userData = await user
-					.findOne({ _id: context.user._id })
-					.select('-__v -password')
-					.populate('books');
+		helloWorld: () => {
+			return 'Hello world!';
+		},
 
-				return userData;
-			}
-			throw new AuthenticationError('Please log in for more information');
-		},
-		// get all books
-		books: async () => {
-			return Book.find();
-		},
-		// get a book by id
-		book: async (parent, { title }) => {
-			return Book.findOne({ title });
-		},
-		// get all users
-		users: async () => {
-			return User.find().select('-__v -password').populate('books');
-		},
-		user: async (parent, { username }) => {
-			return User.findOne({ username })
-				.select('-__v -password')
-				.populate('books');
-		},
-	},
-	Mutation: {
-		addUser: async (parent, args) => {
-			const user = await User.create(args);
-			const token = signToken(user);
+		// 	me: async (parent, args, context) => {
+		// 		if (context.user) {
+		// 			const userData = await user
+		// 				.findOne({ _id: context.user._id })
+		// 				.select('-__v -password')
+		// 				.populate('books');
 
-			return { token, user };
-		},
-		login: async (parent, { email, password }) => {
-			const user = await User.findOne({ email });
+		// 			return userData;
+		// 		}
+		// 		throw new AuthenticationError('Please log in for more information');
+		// 	},
+		// 	// get all books
+		// 	books: async () => {
+		// 		return Book.find();
+		// 	},
+		// 	// get a book by id
+		// 	book: async (parent, { title }) => {
+		// 		return Book.findOne({ title });
+		// 	},
+		// 	// get all users
+		// 	users: async () => {
+		// 		return User.find().select('-__v -password').populate('books');
+		// 	},
+		// 	user: async (parent, { username }) => {
+		// 		return User.findOne({ username })
+		// 			.select('-__v -password')
+		// 			.populate('books');
+		// 	},
+		// },
+		// Mutation: {
+		// 	addUser: async (parent, args) => {
+		// 		const user = await User.create(args);
+		// 		const token = signToken(user);
 
-			if (!user) {
-				throw new AuthenticationError('Incorrent credentials');
-			}
-			const correctPw = await user.isCorrectPassword(password);
+		// 		return { token, user };
+		// 	},
+		// 	login: async (parent, { email, password }) => {
+		// 		const user = await User.findOne({ email });
 
-			if (!correctPw) {
-				throw new AuthenticationError('Incorrect credentials');
-			}
-			const token = signToken(user);
-			return { token, user };
-		},
-		addBook: async (parent, args) => {
-			const book = await Book.create(args);
-			return book;
-		},
+		// 		if (!user) {
+		// 			throw new AuthenticationError('Incorrent credentials');
+		// 		}
+		// 		const correctPw = await user.isCorrectPassword(password);
+
+		// 		if (!correctPw) {
+		// 			throw new AuthenticationError('Incorrect credentials');
+		// 		}
+		// 		const token = signToken(user);
+		// 		return { token, user };
+		// 	},
+		// 	addBook: async (parent, args) => {
+		// 		const book = await Book.create(args);
+		// 		return book;
+		// 	},
 	},
 };
 
